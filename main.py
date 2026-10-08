@@ -71,7 +71,18 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--ticket", metavar="ID", help="Usa la descripción de un ticket de data/*.jsonl."
     )
+    parser.add_argument(
+        "--temperature",
+        type=float,
+        metavar="T",
+        help="Temperatura del modelo (0–2). Si se omite, usa el default del proveedor.",
+    )
     args = parser.parse_args(argv)
+
+    # Validación: 0 ≤ temperature ≤ 2
+    if args.temperature is not None and not (0 <= args.temperature <= 2):
+        parser.error("--temperature debe estar entre 0 y 2.")
+
     if args.prompt is None and not (args.demo or args.ticket):
         parser.error("falta el texto a enviar (o usa --demo o --ticket).")
     if args.prompt_version is not None and not args.prompt_name:
@@ -145,7 +156,9 @@ def main(argv: list[str] | None = None) -> int:
             messages = prompt.render(**variables, ticket=text)
         except (PromptNotFoundError, ValueError) as e:
             return fail(str(e))
-        cli_params: dict = {}  # Flags de la CLI (si existen) tienen prioridad.
+        cli_params: dict = {}
+        if args.temperature is not None:
+            cli_params["temperature"] = args.temperature
         params = {**prompt.model_params, **cli_params}
         log_extra = {"prompt_name": prompt.name, "prompt_version": prompt.version}
     else:
@@ -153,6 +166,8 @@ def main(argv: list[str] | None = None) -> int:
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": text or demo_prompt()},
         ]
+        if args.temperature is not None:
+            params["temperature"] = args.temperature
 
     try:
         client = build_client(args)
