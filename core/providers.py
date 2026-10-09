@@ -123,13 +123,14 @@ class OllamaProvider(OpenAICompatibleProvider):
 
 class GroqProvider(OpenAICompatibleProvider):
     name = "groq"
-    base_url = base_url="https://api.groq.com/openai/v1"
+    base_url = base_url = "https://api.groq.com/openai/v1"
     # TODO(clase-1): implementa el adaptador de Groq en 3 pasos.
     #   1. Busca en la documentación de Groq el endpoint compatible con OpenAI
     #      (https://console.groq.com/docs/openai).
     #   2. Fija `name = "groq"` y `base_url = "..."` como atributos de clase, igual que
     #      GeminiProvider.
     #   3. Borra este __init__ y prueba: uv run main.py --provider groq "hola"
+
 
 def build_provider(name: str, settings: Settings) -> Provider:
     """Crea el adaptador de un proveedor a partir de la configuración."""

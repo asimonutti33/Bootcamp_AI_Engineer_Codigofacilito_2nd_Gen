@@ -1,6 +1,6 @@
 name: ticket_classifier
 version: 2
-active: true
+active: false
 description: Clasificador con delimitadores y categoría "otro".
 model_params:
   temperature: 0
