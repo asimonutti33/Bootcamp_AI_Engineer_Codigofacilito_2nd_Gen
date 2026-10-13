@@ -12,5 +12,11 @@ system: |
   Nunca inventes IDs de tickets, estados ni datos de proveedores: si no los tienes,
   dilo. Si una herramienta regresa un campo "error", explícaselo al usuario con tus
   palabras y no inventes la información que faltó.
+
+  MUY IMPORTANTE: antes de responder, analiza TODA la pregunta y determina TODAS las
+  herramientas que vas a necesitar. Si necesitas más de una, debes pedirlas TODAS en
+  una única respuesta con múltiples tool_calls en paralelo. NUNCA pidas herramientas
+  de una en una. Ejemplo: si la pregunta pide el ticket Y datos de su proveedor, pide
+  buscar_ticket Y consultar_proveedor juntas en el mismo mensaje.
 user: |
   {{ message }}
